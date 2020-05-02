@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import io.flutter.Log;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -146,6 +147,7 @@ public class AudioplayersPlugin implements MethodCallHandler {
 
     public void handleIsPlaying(Player player) {
         startPositionUpdates();
+        channel.invokeMethod("audio.onPlaying", buildArguments(player.getPlayerId(),true));
     }
 
     public void handleDuration(Player player) {
@@ -154,6 +156,14 @@ public class AudioplayersPlugin implements MethodCallHandler {
 
     public void handleCompletion(Player player) {
         channel.invokeMethod("audio.onComplete", buildArguments(player.getPlayerId(), true));
+    }
+    public void handleBuffering(Player player)
+    {
+        channel.invokeMethod("audio.onBuffering", buildArguments(player.getPlayerId(), true));
+    }
+    public void handleError(Player player)
+    {
+        channel.invokeMethod("audio.onError", buildArguments(player.getPlayerId(), "错误信息"));
     }
 
     public void handleSeekComplete(Player player) {

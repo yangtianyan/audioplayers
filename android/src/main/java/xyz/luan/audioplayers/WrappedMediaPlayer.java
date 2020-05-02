@@ -6,10 +6,11 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.PowerManager;
 import android.content.Context;
+import android.util.Log;
 
 import java.io.IOException;
 
-public class WrappedMediaPlayer extends Player implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnSeekCompleteListener {
+public class WrappedMediaPlayer extends Player implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnSeekCompleteListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnErrorListener {
 
     private String playerId;
 
@@ -242,6 +243,7 @@ public class WrappedMediaPlayer extends Player implements MediaPlayer.OnPrepared
 
     @Override
     public void onPrepared(final MediaPlayer mediaPlayer) {
+        Log.v(this.getClass().toString(), " --- onPrepared --- ");
         this.prepared = true;
         ref.handleDuration(this);
         if (this.playing) {
@@ -266,7 +268,17 @@ public class WrappedMediaPlayer extends Player implements MediaPlayer.OnPrepared
     public void onSeekComplete(final MediaPlayer mediaPlayer) {
         ref.handleSeekComplete(this);
     }
-
+    @Override
+    public void onBufferingUpdate(MediaPlayer mp, int percent) {
+        Log.v(this.getClass().toString(), "onBufferingUpdate");
+        ref.handleBuffering(this);
+    }
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        Log.v(this.getClass().toString(), "打印错误信息");
+        ref.handleError(this);
+        return false;
+    }
     /**
      * Internal logic. Private methods
      */
@@ -276,6 +288,8 @@ public class WrappedMediaPlayer extends Player implements MediaPlayer.OnPrepared
         player.setOnPreparedListener(this);
         player.setOnCompletionListener(this);
         player.setOnSeekCompleteListener(this);
+        player.setOnBufferingUpdateListener(this);
+        player.setOnErrorListener(this);
         setAttributes(player, context);
         player.setVolume((float) volume, (float) volume);
         player.setLooping(this.releaseMode == ReleaseMode.LOOP);
@@ -322,5 +336,7 @@ public class WrappedMediaPlayer extends Player implements MediaPlayer.OnPrepared
             }
         }
     }
+
+
 
 }

@@ -44,6 +44,7 @@ enum AudioPlayerState {
   PLAYING,
   PAUSED,
   COMPLETED,
+  Buffering,
 }
 
 /// Indicates which speakers use for playing
@@ -387,7 +388,7 @@ class AudioPlayer {
     });
 
     if (result == 1) {
-      state = AudioPlayerState.PLAYING;
+      state = AudioPlayerState.Buffering;
     }
 
     return result;
@@ -592,6 +593,12 @@ class AudioPlayer {
         player._errorController.add(value);
         // ignore: deprecated_member_use_from_same_package
         player.errorHandler?.call(value);
+        break;
+      case 'audio.OnBuffering':
+        break;
+      case 'audio.onPlaying':
+        print(' ----- audio.onPlaying ----- ');
+        player.state = AudioPlayerState.PLAYING;
         break;
       default:
         _log('Unknown method ${call.method} ');
