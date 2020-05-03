@@ -428,7 +428,7 @@ class AudioPlayer {
     final int result = await _invokeMethod('resume');
 
     if (result == 1) {
-      state = AudioPlayerState.PLAYING;
+//      state = AudioPlayerState.PLAYING;
     }
 
     return result;
