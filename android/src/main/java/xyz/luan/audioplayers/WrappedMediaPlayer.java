@@ -270,7 +270,7 @@ public class WrappedMediaPlayer extends Player implements MediaPlayer.OnPrepared
     }
     @Override
     public void onBufferingUpdate(MediaPlayer mp, int percent) {
-        Log.v(this.getClass().toString(), "onBufferingUpdate");
+//        Log.v(this.getClass().toString(), "onBufferingUpdate");
         ref.handleBuffering(this);
     }
     @Override
