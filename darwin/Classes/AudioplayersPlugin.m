@@ -546,7 +546,8 @@ const float _defaultPlaybackRate = 1.0;
            } else {
              [player play];
            }
-
+      //yty fax
+      [_channel_audioplayer invokeMethod:@"audio.onPlaying" arguments:@{@"playerId":playerId?:@""}];
            [ playerInfo setObject:@true forKey:@"isPlaying" ];
          }
   ];

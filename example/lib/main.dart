@@ -45,6 +45,9 @@ class _ExampleAppState extends State<ExampleApp> {
       }
       advancedPlayer.startHeadlessService();
     }
+    advancedPlayer.onPlayerStateChanged.listen((event) {
+      print("event => $event");
+    });
   }
 
   Future _loadFile() async {
